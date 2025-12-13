@@ -65,4 +65,19 @@ ggplot(all_recipes_c, aes(x = avg_rating, y = calories)) +
 ```
 
 ## Statistical modeling
-###Linear regression
+### Simple linear regression
+To test the hypothesis that caloric content is associated with average ratings, we fit a simple linear regression model with average rating as the outcome variable and calories as the predictor.
+
+```{r}
+model_simple <- lm(avg_rating ~ calories, data = all_recipes_c)
+summary(model_simple)
+```
+
+### Multiple linear regression
+To account for potential confounding variables, we also fit a multiple linear regression model including preparation time and macronutrient content as additional predictors.
+
+```{r}
+model_multiple <- lm(avg_rating ~ calories + total_time + protein + fat + carbs,
+data = all_recipes_c)
+summary(model_multiple)
+```
