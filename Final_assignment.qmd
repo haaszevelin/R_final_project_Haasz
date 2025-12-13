@@ -8,10 +8,10 @@ library(tidyverse)
 library(dplyr)
 library(ggthemes)
 
-my_theme <- theme_economist() +
+my_theme <- theme_economist() + # setting a default theme
   theme(
     text = element_text(size = 12),
-    plot.title = element_text(face = "bold"),
+    plot.title = element_text(face = "bold", hjust = 0.5),
     panel.grid.minor = element_blank()
   )
 
@@ -19,9 +19,9 @@ theme_set(my_theme)
 ```
 
 ## Introduction
-Online recipe platforms collect and provide various different types of data about recipes and their different parameters. One commonly used indicator of recipe quality is the rating of users. At the same time there might be other parameters, such as nutritional values, that can influence how appealing a recipe is perceived.
+Online recipe platforms collect and provide various different types of data about recipes and their different parameters. One commonly used indicator of recipe quality is the rating of users. At the same time, there might be other parameters, such as nutritional values, that can influence how appealing a recipe is perceived.
 
-The aim of this project is to exmaine whether there is an association between the caloric content of recipes and their average user ratings using the data from the TidyTuesday package. Specifically, the hypothesis that recipes with higher calories recieive higher agerage user ratings.
+The aim of this project is to exmaine whether there is an association between the caloric content of recipes and their average user ratings using the data from the TidyTuesday package. Specifically, the hypothesis that recipes with higher calories receive higher average user ratings.
 
 ## Data
 
