@@ -5,6 +5,7 @@ format: html
 ---
 ```{r setup}
 library(tidyverse)
+library(dplyr)
 ```
 
 ## Introduction
@@ -33,8 +34,11 @@ drop_na()
 head(all_recipes_c)
 summary(all_recipes_c)
 
+mean <- mean(all_recipes_c$calories)
+sd <- sd(all_recipes_c$calories)
+
 all_recipes_c <- all_recipes_c %>%
-  filter(calories <= 2000)
+  filter(between(calories, mean - 3*sd, mean + 3*sd))
 ```
 
 ## Exploratory data analysis
@@ -89,3 +93,5 @@ To assess whether the assumptions of linear regression are met, we examine stand
 par(mfrow = c(2, 2))
 plot(model_multiple)
 ```
+
+
