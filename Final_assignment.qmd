@@ -94,4 +94,11 @@ par(mfrow = c(2, 2))
 plot(model_multiple)
 ```
 
+Diagnostic plots for multiple regression model show that residuals center around zero with fairly constant variance, points do not show extremely deviant patterns. The Q-Q plots show that the majority of the data points are close to the linear line, but the tails diverge considerably. Most observations show low leverage and small residuals, within acceptable Cook's distance, indicating a low number of highly influental data points.
 
+## Results
+We examined the relationship between caloric content and average recipe ratings using data from an online recipe platform. In the simple linear regression model calorie was a significant predictor, but only really low effects could be measured (R² = .0018). Suggesting that the significance is only due to sample size and not the explanatory power of the predictor. 
+
+A multiple linear regression was conducted to examine whether calories, total preparation time, protein, fat, and carbohydrate content predict average recipe ratings. The overall model was statistically significant, F(5, 12979) = 9.63, p < .001, but explained very little variance in ratings (adj. R² = .0033). Among the predictors, only total preparation time showed significance (β = 1.09 × 10⁻⁵, p = .049), indicating a very small positive association with average ratings. All other predictors, including calories, protein, fat, and carbohydrates, were not statistically significant. These results suggest that nutritional content and preparation time have minimal practical impact on average ratings in this dataset.
+
+## Conclusion
