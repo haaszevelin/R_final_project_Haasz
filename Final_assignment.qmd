@@ -6,6 +6,16 @@ format: html
 ```{r setup}
 library(tidyverse)
 library(dplyr)
+library(ggthemes)
+
+my_theme <- theme_economist() +
+  theme(
+    text = element_text(size = 12),
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+
+theme_set(my_theme)
 ```
 
 ## Introduction
@@ -38,7 +48,7 @@ mean <- mean(all_recipes_c$calories)
 sd <- sd(all_recipes_c$calories)
 
 all_recipes_c <- all_recipes_c %>%
-  filter(between(calories, mean - 3*sd, mean + 3*sd))
+  filter(between(calories, mean - 3*sd, mean + 3*sd))  #filtering out observatoins ±3 sd
 ```
 
 ## Exploratory data analysis
@@ -101,4 +111,5 @@ We examined the relationship between caloric content and average recipe ratings 
 
 A multiple linear regression was conducted to examine whether calories, total preparation time, protein, fat, and carbohydrate content predict average recipe ratings. The overall model was statistically significant, F(5, 12979) = 9.63, p < .001, but explained very little variance in ratings (adj. R² = .0033). Among the predictors, only total preparation time showed significance (β = 1.09 × 10⁻⁵, p = .049), indicating a very small positive association with average ratings. All other predictors, including calories, protein, fat, and carbohydrates, were not statistically significant. These results suggest that nutritional content and preparation time have minimal practical impact on average ratings in this dataset.
 
-## Conclusion
+## Conclusion and limitations
+Examining the relationship between the nutritional value of recipes and their popularity seems promising for several reasons. However, since we did not find evidence supporting our hypothesis in the dataset, we must assume that this relationship is more complex than expected. From an evolutionary perspective, it seems logical that people would instinctively prefer high-calorie foods, as these tend to be more filling and are often perceived as tastier. At the same time, many additional factors must be considered, such as diet culture and social norms. Future studies should control for differences between countries and lifestyles. Another limitation of this study is that, although a five-star rating system is convenient and easy to interpret, the limited number of response options restrict the depth of analysis.
