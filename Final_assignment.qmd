@@ -32,6 +32,37 @@ select(name, avg_rating, calories, total_time, protein, fat, carbs) %>%
 drop_na()
 head(all_recipes_c)
 summary(all_recipes_c)
+
+all_recipes_c <- all_recipes_c %>%
+  filter(calories <= 2000)
 ```
 
 ## Exploratory data analysis
+
+First, we examine the distribution of caloric content across recipes.
+
+```{r}
+ggplot(all_recipes_c, aes(x = calories)) +
+  geom_histogram(bins = 60) +
+  labs(title = "Distribution of Recipe Calories", x = "Calories", y = "Count")
+```
+
+Then, we examine the distribution of caloric content across recipes.
+
+```{r}
+ggplot(all_recipes_c, aes(x = avg_rating)) +
+  geom_histogram(bins = 20) +
+  labs(title = "Distribution of Average Recipe Ratings", x = "Average Rating", y = "Count")
+```
+
+To explore the relationship between calories and ratings, we create a scatter plot with a fitted linear trend.
+
+```{r}
+ggplot(all_recipes_c, aes(x = avg_rating, y = calories)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm") +
+  labs(title = "Calories and average rating", x = "Average rating", y = "Calories")
+```
+
+## Statistical modeling
+###Linear regression
