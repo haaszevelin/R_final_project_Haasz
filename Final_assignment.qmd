@@ -81,3 +81,11 @@ model_multiple <- lm(avg_rating ~ calories + total_time + protein + fat + carbs,
 data = all_recipes_c)
 summary(model_multiple)
 ```
+
+## Model diagnostics
+To assess whether the assumptions of linear regression are met, we examine standard diagnostic plots for the multiple regression model. The diagnostic plots are used to evaluate linearity, homoscedasticity, normality of residuals, and the presence of influential observations.
+
+```{r}
+par(mfrow = c(2, 2))
+plot(model_multiple)
+```
