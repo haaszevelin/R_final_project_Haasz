@@ -12,19 +12,26 @@ Online recipe platforms collect and provide various different types of data abou
 
 The aim of this project is to exmaine whether there is an association between the caloric content of recipes and their average user ratings using the data from the TidyTuesday package. Specifically, the hypothesis that recipes with higher calories recieive higher agerage user ratings.
 
-## Running Code
+## Data
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
+The data used for analyses comes from the TidyTuesday dataset published on 2025-09-16, which containes information about recipes sourced from Allrecipes.
 
 ```{r}
-#| echo: false
-2 * 2
+all_recipes_o <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-09-16/all_recipes.csv")
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+In the analyses we will focus on the following variables:
+- *avg_rating*: Average user rating of a recipe
+- *calories*: Caloric content of the recipe
+- *total_time*: Total preparation time
+- *protein, fat, carbs*: Macronutrient information
+
+```{r}
+all_recipes_c <- all_recipes_o %>%
+select(name, avg_rating, calories, total_time, protein, fat, carbs) %>%
+drop_na()
+head(all_recipes_c)
+summary(all_recipes_c)
+```
+
+## Exploratory data analysis
