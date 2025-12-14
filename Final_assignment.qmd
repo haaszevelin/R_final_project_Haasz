@@ -61,7 +61,7 @@ ggplot(all_recipes_c, aes(x = calories)) +
   labs(title = "Distribution of calories in recipes", x = "Calories", y = "Count")
 ```
 
-Then, we examine the distribution of caloric content across recipes.
+Then, we examine the distribution of user ratings across recipes.
 
 ```{r}
 ggplot(all_recipes_c, aes(x = avg_rating)) +
