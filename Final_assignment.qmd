@@ -21,26 +21,26 @@ theme_set(my_theme)
 ## Introduction
 Online recipe platforms collect and provide various different types of data about recipes and their different parameters. One commonly used indicator of recipe quality is the rating of users. At the same time, there might be other parameters, such as nutritional values, that can influence how appealing a recipe is perceived.
 
-The aim of this project is to exmaine whether there is an association between the caloric content of recipes and their average user ratings using the data from the TidyTuesday package. Specifically, the hypothesis that recipes with higher calories receive higher average user ratings.
+The aim of this project is to examine whether there is an association between the caloric content of recipes and their average user ratings using the data from the TidyTuesday package. Specifically, the hypothesis that recipes with higher calories receive higher average user ratings is tested.
 
 ## Data
 
-The data used for analyses comes from the TidyTuesday dataset published on 2025-09-16, which containes information about recipes sourced from Allrecipes.
+The data used for analysis comes from the TidyTuesday dataset published on 2025-09-16, which contains information about recipes sourced from Allrecipes.
 
 ```{r}
 all_recipes_o <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-09-16/all_recipes.csv")
 ```
 
 In the analyses we will focus on the following variables:
-- *avg_rating*: Average user rating of a recipe
-- *calories*: Caloric content of the recipe
-- *total_time*: Total preparation time
-- *protein, fat, carbs*: Macronutrient information
+- *avg_rating*: average user rating of a recipe
+- *calories*: caloric content of the recipe
+- *total_time*: total preparation time
+- *protein, fat, carbs*: macronutrient information
 
 ```{r}
 all_recipes_c <- all_recipes_o %>%
-select(name, avg_rating, calories, total_time, protein, fat, carbs) %>%
-drop_na()
+select(name, avg_rating, calories, total_time, protein, fat, carbs) %>% # selecting the variables needed
+drop_na() 
 head(all_recipes_c)
 summary(all_recipes_c)
 
@@ -48,7 +48,7 @@ mean <- mean(all_recipes_c$calories)
 sd <- sd(all_recipes_c$calories)
 
 all_recipes_c <- all_recipes_c %>%
-  filter(between(calories, mean - 3*sd, mean + 3*sd))  #filtering out observatoins ±3 sd
+  filter(between(calories, mean - 3*sd, mean + 3*sd))  #filtering out observations ±3 sd
 ```
 
 ## Exploratory data analysis
@@ -58,7 +58,7 @@ First, we examine the distribution of caloric content across recipes.
 ```{r}
 ggplot(all_recipes_c, aes(x = calories)) +
   geom_histogram(bins = 60) +
-  labs(title = "Distribution of Recipe Calories", x = "Calories", y = "Count")
+  labs(title = "Distribution of calories in recipes", x = "Calories", y = "Count")
 ```
 
 Then, we examine the distribution of caloric content across recipes.
@@ -66,7 +66,7 @@ Then, we examine the distribution of caloric content across recipes.
 ```{r}
 ggplot(all_recipes_c, aes(x = avg_rating)) +
   geom_histogram(bins = 20) +
-  labs(title = "Distribution of Average Recipe Ratings", x = "Average Rating", y = "Count")
+  labs(title = "Distribution of average recipe ratings", x = "Average rating", y = "Count")
 ```
 
 To explore the relationship between calories and ratings, we create a scatter plot with a fitted linear trend.
@@ -79,37 +79,43 @@ ggplot(all_recipes_c, aes(x = avg_rating, y = calories)) +
 ```
 
 ## Statistical modeling
+
 ### Simple linear regression
+
 To test the hypothesis that caloric content is associated with average ratings, we fit a simple linear regression model with average rating as the outcome variable and calories as the predictor.
 
 ```{r}
 model_simple <- lm(avg_rating ~ calories, data = all_recipes_c)
-summary(model_simple)
+summary(model_simple)  # writing out parameters
 ```
 
 ### Multiple linear regression
-To account for potential confounding variables, we also fit a multiple linear regression model including preparation time and macronutrient content as additional predictors.
+
+To account for potential confounding variables, we also fit a multiple linear regression model including preparation time and different macronutrient contents as additional predictors.
 
 ```{r}
 model_multiple <- lm(avg_rating ~ calories + total_time + protein + fat + carbs,
 data = all_recipes_c)
-summary(model_multiple)
+summary(model_multiple) # again, we write out parameters
 ```
 
 ## Model diagnostics
+
 To assess whether the assumptions of linear regression are met, we examine standard diagnostic plots for the multiple regression model. The diagnostic plots are used to evaluate linearity, homoscedasticity, normality of residuals, and the presence of influential observations.
 
 ```{r}
 par(mfrow = c(2, 2))
-plot(model_multiple)
+plot(model_multiple) # creating plots for assumption checks
 ```
 
-Diagnostic plots for multiple regression model show that residuals center around zero with fairly constant variance, points do not show extremely deviant patterns. The Q-Q plots show that the majority of the data points are close to the linear line, but the tails diverge considerably. Most observations show low leverage and small residuals, within acceptable Cook's distance, indicating a low number of highly influental data points.
+Diagnostic plots for multiple regression model show that residuals center around zero with fairly constant variance, points do not show extremely deviant patterns. The Q-Q plots show that the majority of the data points are close to the linear line, but the tails diverge considerably. Most observations show low leverage and small residuals, within acceptable Cook's distance, indicating a low number of extremely influental data points.
 
 ## Results
-We examined the relationship between caloric content and average recipe ratings using data from an online recipe platform. In the simple linear regression model calorie was a significant predictor, but only really low effects could be measured (R² = .0018). Suggesting that the significance is only due to sample size and not the explanatory power of the predictor. 
 
-A multiple linear regression was conducted to examine whether calories, total preparation time, protein, fat, and carbohydrate content predict average recipe ratings. The overall model was statistically significant, F(5, 12979) = 9.63, p < .001, but explained very little variance in ratings (adj. R² = .0033). Among the predictors, only total preparation time showed significance (β = 1.09 × 10⁻⁵, p = .049), indicating a very small positive association with average ratings. All other predictors, including calories, protein, fat, and carbohydrates, were not statistically significant. These results suggest that nutritional content and preparation time have minimal practical impact on average ratings in this dataset.
+A simple linear regression was conducted to examine the association between caloric content and average recipe ratings. The model was statistically significant, F(1, 12,983) = 23.33, p < .001, however it explained only a very small proportion of the variance in ratings (ajd. R² = .002). Caloric content was positively associated with average ratings (β = 8.62 × 10⁻⁵, SE = 1.78 × 10⁻⁵, p < .001), indicating that higher-calorie recipes received slightly higher ratings. Despite statistical significance, the effect size was negligible, suggesting limited practical relevance.
+
+A multiple linear regression was conducted to examine whether calories, total preparation time, protein, fat, and carbohydrate content predict average recipe ratings. The overall model was statistically significant, F(5, 12979) = 9.63, p < .001, but explained very little variance in ratings (adj. R² = .003). Among the predictors, only total preparation time showed significance (β = 1.09 × 10⁻⁵, p = .049), indicating a very small positive association with average ratings. All other predictors, including calories, protein, fat, and carbohydrates, were not statistically significant. These results suggest that nutritional content and preparation time have minimal practical impact on average ratings in this dataset.
 
 ## Conclusion and limitations
-Examining the relationship between the nutritional value of recipes and their popularity seems promising for several reasons. However, since we did not find evidence supporting our hypothesis in the dataset, we must assume that this relationship is more complex than expected. From an evolutionary perspective, it seems logical that people would instinctively prefer high-calorie foods, as these tend to be more filling and are often perceived as tastier. At the same time, many additional factors must be considered, such as diet culture and social norms. Future studies should control for differences between countries and lifestyles. Another limitation of this study is that, although a five-star rating system is convenient and easy to interpret, the limited number of response options restrict the depth of analysis.
+
+Examining the relationship between the nutritional value of recipes and their popularity seems promising for several reasons. However, since we did not find sufficient evidence supporting our hypothesis (significance is probably only due to huge sample size) in the dataset, we must assume that this relationship is more complex than expected. From an evolutionary perspective, it seems logical that people would instinctively prefer high-calorie foods, as these tend to be more filling and are often perceived as tastier. At the same time, many additional factors must be considered, such as diet culture and social norms. Future studies should control for differences between countries and lifestyles. Another limitation of this study is that, although a five-star rating system is convenient and easy to interpret, the limited number of response options restrict the depth of analysis.
